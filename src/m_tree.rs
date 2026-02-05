@@ -21,6 +21,22 @@ impl MerkleTree {
         self.compute();
     }
 
+    pub fn root_hash(&self) {
+        self.root.as_ref().map(|n| n.hash)
+    }
+
+    pub fn contains(& self, value: T) -> bool {
+        let hash = {
+            use std::collections::hash_map::DefaultHasher;
+            use std::hash::Hasher;
+            let mut h = DefaultHasher::new();
+            value.hash(&mut h);
+            h.finish();
+        }
+
+        self.leaves.iter.any(|n| n.hash == hash)
+    }
+
 
     fn compute(&mut self) {
         let mut level = self.leaves.clone()
