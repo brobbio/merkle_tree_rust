@@ -22,7 +22,7 @@ impl MerkleTree {
     }
 
 
-    pub fn compute(&mut self) {
+    fn compute(&mut self) {
         let mut level = self.leaves.clone()
         
         while level.len() > 1 {
@@ -44,6 +44,6 @@ impl MerkleTree {
             
         
         self.root = level.pop();
-        }
+    }
 
 }
