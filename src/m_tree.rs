@@ -1,13 +1,11 @@
 use crate::node::Node;
-use crate::hash::Hash;
 
-
-pub struct MerkleTree {
-    root: Node,
-    leaves: Vec<Node>,
+pub struct MerkleTree<T> {
+    root: Option<Node<T>>,
+    leaves: Vec<Node<T>>,
 }
 
-impl MerkleTree {
+impl<T: std::hash::Hash + Clone> MerkleTree<T> {
     pub fn new() -> Self {
         MerkleTree{
             root: None,
@@ -15,14 +13,22 @@ impl MerkleTree {
         }
     }
 
+    pub fn len(&self) -> usize {
+        return self.leaves.len();
+    }
+
+    pub fn root(&self) -> Option<&Node<T>> {
+        return self.root.as_ref();
+    }
+
     pub fn insert(&mut self, value:T){
-        let leaf = Node::new_leaf(&value);
+        let leaf = Node::new_leaf(value);
         self.leaves.push(leaf);
         self.compute();
     }
 
     pub fn root_hash(&self) {
-        self.root.as_ref().map(|n| n.hash)
+        self.root.as_ref().map(|n| n.hash);
     }
 
     pub fn contains(& self, value: T) -> bool {
@@ -31,21 +37,21 @@ impl MerkleTree {
             use std::hash::Hasher;
             let mut h = DefaultHasher::new();
             value.hash(&mut h);
-            h.finish();
-        }
+            h.finish()
+        };
 
-        self.leaves.iter.any(|n| n.hash == hash)
+        return self.leaves.iter().any(|n| n.hash == hash);
     }
 
 
     fn compute(&mut self) {
-        let mut level = self.leaves.clone()
+        let mut level = self.leaves.clone();
         
         while level.len() > 1 {
             let mut level_minus_one = Vec::new();
 
             for (i,x) in level.iter().enumerate() {
-                let mut left = x.clone();
+                let left = x.clone();
                 let right = if i < level.len() - 1 {
                     level[i+1].clone()
                 } else {
