@@ -2,14 +2,14 @@ use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
 
 #[derive(Clone, Debug)]
-pub struct Node<T> {
+pub struct Node<T: std::fmt::Debug> {
     pub hash: u64,
     pub left: Option<Box<Node<T>>>,
     pub right: Option<Box<Node<T>>>,
     pub value: Option<T>,
 }
 
-impl<T: Hash> Node<T> {
+impl<T: Hash + std::fmt::Debug> Node<T> {
     pub fn new_leaf(value: T) -> Self {
         let hash = Self::hash_value(&value);
 

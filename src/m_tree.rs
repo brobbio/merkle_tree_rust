@@ -1,11 +1,12 @@
 use crate::node::Node;
 
-pub struct MerkleTree<T> {
+
+pub struct MerkleTree<T: std::fmt::Debug> {
     root: Option<Node<T>>,
     leaves: Vec<Node<T>>,
 }
 
-impl<T: std::hash::Hash + Clone> MerkleTree<T> {
+impl<T: std::hash::Hash + Clone + std::fmt::Debug> MerkleTree<T> {
     pub fn new() -> Self {
         MerkleTree{
             root: None,
@@ -27,8 +28,9 @@ impl<T: std::hash::Hash + Clone> MerkleTree<T> {
         self.compute();
     }
 
-    pub fn root_hash(&self) {
-        self.root.as_ref().map(|n| n.hash);
+    pub fn root_hash(&self) -> Option<u64> {
+        //dbg!(self.root.as_ref().map(|n| n.hash));
+        return self.root.as_ref().map(|n| n.hash);
     }
 
     pub fn contains(& self, value: T) -> bool {
@@ -47,17 +49,24 @@ impl<T: std::hash::Hash + Clone> MerkleTree<T> {
     fn compute(&mut self) {
         let mut level = self.leaves.clone();
         
+        
         while level.len() > 1 {
+            
             let mut level_minus_one = Vec::new();
 
-            for (i,x) in level.iter().enumerate() {
-                let left = x.clone();
+            let mut i = 0;
+
+            while i < level.len() {
+                let left = level[i].clone();
                 let right = if i < level.len() - 1 {
                     level[i+1].clone()
                 } else {
-                    x.clone()
+                    level[i].clone()
                 };
-                level_minus_one.push(Node::new_internal(left, right))
+
+                let parent = Node::new_internal(left, right);
+                level_minus_one.push(parent);
+                i += 2;
             
             }
 
