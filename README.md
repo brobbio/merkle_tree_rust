@@ -27,13 +27,10 @@ cargo build --release
 
 
 ## Example
-use merkle_tree_rust::MerkleTree;
 
-let items = vec![
-    "apple".as_bytes().to_vec(),
-    "banana".as_bytes().to_vec(),
-    "cherry".as_bytes().to_vec(),
-];
+```use merkle_tree_rust::MerkleTree;
+
+let items = vec![1,2,3];
 
 let tree = MerkleTree::new(items);
-println!("Computed Merkle Root: {:?}", tree.root());
+println!("Computed Merkle Root: {:?}", tree.root());```
