@@ -14,7 +14,7 @@ This project builds a Merkle Tree from a list of data elements and computes root
 
 ## What Is a Merkle Tree?
 
-In cryptography and computer science, a hash tree or Merkle tree is a tree in which every "leaf" node is labelled with the cryptographic hash of a data block, and every node that is not a leaf (called a branch, inner node, or inode) is labelled with the cryptographic hash of the labels of its child nodes. A hash tree allows efficient and secure verification of the contents of a large data structure. A hash tree is a generalization of a hash list and a hash chain. (Source: https://en.wikipedia.org/wiki/Merkle_tree)
+- In cryptography and computer science, a hash tree or Merkle tree is a tree in which every "leaf" node is labelled with the cryptographic hash of a data block, and every node that is not a leaf (called a branch, inner node, or inode) is labelled with the cryptographic hash of the labels of its child nodes. A hash tree allows efficient and secure verification of the contents of a large data structure. A hash tree is a generalization of a hash list and a hash chain. (Source: https://en.wikipedia.org/wiki/Merkle_tree)
 ---
 
 ## Installation
@@ -22,4 +22,18 @@ In cryptography and computer science, a hash tree or Merkle tree is a tree in wh
 Build the project with Cargo:
 
 ```bash
-cargo build --release
+cargo build --release 
+```
+
+
+## Example
+use merkle_tree_rust::MerkleTree;
+
+let items = vec![
+    "apple".as_bytes().to_vec(),
+    "banana".as_bytes().to_vec(),
+    "cherry".as_bytes().to_vec(),
+];
+
+let tree = MerkleTree::new(items);
+println!("Computed Merkle Root: {:?}", tree.root());
